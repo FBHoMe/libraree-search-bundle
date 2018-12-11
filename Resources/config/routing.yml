@@ -1,0 +1,3 @@
+home_libraree_search:
+  resource: "@HomeLibrareeSearchBundle/Controller"
+  type: annotation

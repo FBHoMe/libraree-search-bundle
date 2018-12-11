@@ -1,0 +1,44 @@
+<div class="search-bar">
+<?php
+#var_dump($this->pin);
+?>
+    <form class="search-form layout-row">
+        <div class="search-input">
+            <input class="search-field" type="text" name="search" placeholder="Auf der Suche nach...?">
+        </div>
+        <div class="search-send">
+            <a href="{{link_url::<?=$this->urlSearch?>}}"></a>
+        </div>
+    </form>
+</div>
+<script>
+    $( document ).ready(function() {
+        var link = $('.search-form a');
+        var searchField = $('.search-field');
+
+        // #-- on enter pressed
+        searchField.keypress(function(e){
+            if(e.which === 13){
+                e.preventDefault();
+                var val = searchField.val();
+                if(val){
+                    window.location.href = link.attr('href') + '?search=' + encodeURI(val.replace('&',''));
+                }
+            }
+        });
+
+        // #-- on link click
+        link.on('click', function (e) {
+            e.preventDefault();
+            var search = $('input[name="search"]');
+
+            if(search.length > 0){
+                var val = search.val();
+                if(val){
+                    window.location.href = $(this).attr('href') + '?search=' + encodeURI(val.replace('&',''));
+                }
+            }
+        });
+    });
+</script>
+

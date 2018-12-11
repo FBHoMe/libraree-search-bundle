@@ -1,0 +1,28 @@
+<div class="<?=$this->class?> search-result-container">
+    <div class="search-result-head">
+        <div class="layout-gt-xs-row">
+            <div class="flex-gt-xs-35">
+                <span class="resort-btn resort-btn-recipes active-type" data-type="recipes">Ergebnisse <span class="result-count result-count-recipe">(<?=$this->pins['count']?>)</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="searched">
+        <h1>Ergebnisse für: <?=$_GET['search']?></h1>
+    </div>
+    <div class="loading hm-hide"><img src="bundles/homelibraree/ajax-loader.gif" alt="Lädt..."></div>
+
+    <div class="search-result-list-container">
+        <?php
+
+            $template = new FrontendTemplate('cte_list');
+            $template->taxonomies = $this->taxonomies;
+            $template->detailAlias = $this->type;
+            $template->pins = $this->pins['pins'];
+            $template->class = $this->class;
+
+            echo $template->parse();
+        ?>
+    </div>
+</div>
+

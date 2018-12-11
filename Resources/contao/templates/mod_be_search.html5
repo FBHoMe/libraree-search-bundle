@@ -1,0 +1,143 @@
+<?php
+#var_dump($this->listAll);
+#var_dump($this->listMonth);
+$today = date('d.m.Y');
+$lastCount = 0;
+?>
+<table style="margin:18px;">
+    <tr>
+        <td style="border: solid lightgray 1px;">
+            <div class="hm-tab-button hm-show-all" style="padding:7px; cursor: pointer;"><b>Nach Anzahl</b></div>
+        </td>
+        <td style="border: solid lightgray 1px;">
+            <div class="hm-tab-button hm-show-month" style="padding:7px; cursor: pointer;"><b>Nach Monat</b></div>
+        </td>
+    </tr>
+</table>
+
+
+<div class="hm-search-list-all">
+    <div class="tl_listing_container list_view" id="tl_listing">
+        <table class="tl_listing">
+            <tbody>
+            <th class="tl_folder_tlist">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <div>Gesucht</div>
+                    <div>Anzahl</div>
+                    <div>Zuletzt</div>
+                    <div>Ergebnisse</div>
+                </div>
+            </th>
+            <?php if(is_array($this->listAll) && count($this->listAll) > 0) : ?>
+                <?php foreach ($this->listAll as $key => $row) : ?>
+                    <?php if( $lastCount !== $row['count']) : ?>
+                        <?php $lastCount = $row['count']; ?>
+                    <?php endif; ?>
+            <tr class="<?= ($key & 1) ? 'even' : 'odd'?> click2edit toggle_select hover-row">
+                <td class="tl_file_list" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <div title="<?=$row['searched']['name']?>"><b><?=substr($row['searched']['name'], 0, 39)?></b></div>
+                    <div><?=$row['count']?></div>
+                    <div><?=date('d.m.Y',$row['lastDate']) === $today ? 'Heute' : date('d.m.Y',$row['lastDate'])?><br></div>
+                    <div><?=$row['searched']['count']?></div>
+                </td>
+            </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="hm-search-list-month" style="display: none;">
+
+    <div class="tl_listing_container list_view" id="tl_listing">
+        <select class="month-select" style="margin-bottom:20px;">
+            <option value="alle">Alle</option>
+            <?php if(is_array($this->listMonth) && count($this->listMonth) > 0) : ?>
+                <?php foreach ($this->listMonth as $month) : ?>
+                    <option value="<?=str_replace('.','-', $month['month'])?>"><?=$month['month']?></option>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </select>
+        <table class="tl_listing">
+            <tbody>
+            <?php if(is_array($this->listMonth) && count($this->listMonth) > 0) : ?>
+                <?php foreach ($this->listMonth as $month) : ?>
+                <?php
+                    $monthClass = str_replace('.','-', $month['month']);
+                    $monthTotalSearched = 0;
+                    foreach ($month['items'] as $row){
+                        $monthTotalSearched += $row['count'];
+                    }
+                ?>
+                    <tr class="<?=$monthClass?> header">
+                        <td colspan="2" class="tl_folder_tlist">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
+                                <div>Monat: <b><?=$month['month']?></b></div>
+                                <div>Suchanfragen: <?= $monthTotalSearched?></div>
+                                <div>Suchbegriffe: <?= (is_array($month['items']) && count($month['items']) > 0) ? count($month['items']) : ' - '?></div>
+                            </div>
+                            <hr>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+                                <div>Gesucht</div>
+                                <div>Anzahl</div>
+                                <div>Zuletzt</div>
+                                <div>Ergebnisse</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php if(is_array($month['items']) && count($month['items']) > 0) : ?>
+                        <?php foreach ($month['items'] as $key => $row) : ?>
+                            <?php $counter = 0; ?>
+                            <tr class="<?=$monthClass?> <?= ($counter & 1) ? 'even' : 'odd'?> click2edit toggle_select hover-row">
+                                <td class="tl_file_list" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+                                    <div title="<?=$row['searched']['name']?>"><b><?=substr($row['searched']['name'], 0, 39)?></b><br></div>
+                                    <div><?=$row['count']?><br></div>
+                                    <div><?=date('d.m.Y',$row['lastDate']) === $today ? 'Heute' : date('d.m.Y',$row['lastDate'])?><br></div>
+                                    <div><?=$row['searched']['count']?></div>
+                                </td>
+                            </tr>
+                            <?php $counter++; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $( document ).ready(function() {
+        let tabButton = $('.hm-tab-button');
+        if(tabButton.length > 0){
+            tabButton.on('click', function(){
+                let me = $(this);
+                if(me.hasClass('hm-show-all')){
+                    $('.hm-search-list-all').css('display','block');
+                    $('.hm-search-list-month').css('display','none');
+                }else{
+                    $('.hm-search-list-all').css('display','none');
+                    $('.hm-search-list-month').css('display','block');
+                }
+            });
+        }
+
+        let monthSelect = $('.month-select');
+        if(monthSelect.length > 0){
+            monthSelect.on('change', function(){
+
+                let selection = $(this).val();
+                let monthTable = $('.hm-search-list-month');
+
+                if(selection !== 'alle'){
+                    monthTable.find('tr').css('display','none');
+                    monthTable.find('.'+$(this).val()).css('display','table-row');
+                }else{
+                    monthTable.find('tr').css('display','table-row');
+                }
+
+            });
+        }
+    })
+</script>

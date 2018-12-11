@@ -1,0 +1,32 @@
+<div class="search">
+<?php
+#var_dump($this->pin);
+?>
+    <form class="search-form layout-row">
+        <div class="search-input">
+            <input class="search-field" type="text" name="suche" placeholder="Was suchst Du?">
+        </div>
+        <div class="search-send">
+            <a class="fa fa-2x fa-search" href="{{link_url::<?=$this->urlLink?>}}"></a>
+        </div>
+    </form>
+</div>
+<script>
+    var j = jQuery.noConflict();
+    j( document ).ready(function() {
+        var link = j('.search-form a');
+
+        link.on('click', function (e) {
+            e.preventDefault();
+            var search = j('input[name="suche"]');
+
+            if(search.length > 0){
+                var val = search.val();
+                if(val){
+                    window.location.href = j(this).attr('href') + '?search=' + encodeURI(val);
+                }
+            }
+        });
+    });
+</script>
+

@@ -1,0 +1,4 @@
+services:
+#    home_libraree_search.example:
+#        class: Home\LibrareeSearchBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
