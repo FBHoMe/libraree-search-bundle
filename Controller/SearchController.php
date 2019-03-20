@@ -3,7 +3,7 @@
 namespace Home\LibrareeSearchBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Home\LibrareeSearchBundle\Resources\contao\elements\SearchResultElement as SearchResult;
 
