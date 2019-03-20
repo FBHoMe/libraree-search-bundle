@@ -9,7 +9,7 @@
 namespace Home\LibrareeSearchBundle\Resources\contao\elements;
 
 use Contao\StringUtil;
-use Home\CustomizeeBundle\Resources\contao\dca\BasePinDca;
+use Home\LibrareeBundle\Resources\contao\BasePinDca;
 use Home\LibrareeSearchBundle\Resources\contao\models\LibSearchModel;
 use Home\PearlsBundle\Resources\contao\Helper as Helper;
 use Home\TaxonomeeBundle\Resources\contao\models\TaxonomeeModel;
